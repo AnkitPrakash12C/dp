@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'arshah22/notes-app:latest'
+        IMAGE_NAME = 'ankitprakash1808/notes-app:latest'
     }
 
     stages {
         stage('Clone Code') {
             steps {
                 git branch: 'main', 
-                url: 'https://github.com/AdeyRatnaShah/NotesApp'
+                url: 'https://github.com/AnkitPrakash12C/dp'
             }
         }
 
