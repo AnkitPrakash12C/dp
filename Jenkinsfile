@@ -21,16 +21,27 @@ pipeline {
             }
         }
 
+        stage('Clean Up Old Containers') {
+            steps {
+                script {
+                    sh '''
+                        echo "Stopping and removing old containers..."
+                        docker stop db_cont || true
+                        docker rm -f db_cont || true
+
+                        docker stop django_cont || true
+                        docker rm -f django_cont || true
+
+                        docker-compose down || true
+                    '''
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 script {
-                    // Remove any existing containers before deployment
-                    sh '''
-                        docker-compose down || true
-                        docker ps -aq --filter "name=django_cont" | xargs -r docker rm -f
-                        docker ps -aq --filter "name=db_cont" | xargs -r docker rm -f
-                        docker-compose up -d
-                    '''
+                    sh 'docker-compose up -d'
                 }
             }
         }
