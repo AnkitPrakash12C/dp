@@ -24,9 +24,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Ensure any previous containers are removed before starting new ones
+                    // Remove any existing containers before deployment
                     sh '''
                         docker-compose down || true
+                        docker ps -aq --filter "name=django_cont" | xargs -r docker rm -f
                         docker ps -aq --filter "name=db_cont" | xargs -r docker rm -f
                         docker-compose up -d
                     '''
