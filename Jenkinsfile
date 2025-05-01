@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
-        IMAGE_NAME = "ankitprakash1808/notes-app:${IMAGE_TAG}"
+        IMAGE_NAME = 'ankitprakash1808/notes-app:latest'
     }
 
     stages {
@@ -17,9 +16,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.image('docker').inside {
-                        sh "docker build -t ${IMAGE_NAME} ."
-                    }
+                    sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
         }
@@ -37,14 +34,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    docker.image('docker/compose:1.29.2').inside('-v $PWD:/app -w /app') {
-                        sh 'docker-compose down || true'
-                        sh 'docker-compose up -d'
-                    }
+                    sh 'docker-compose down || true'
+                    sh 'docker-compose up -d'
                 }
             }
         }
-
     }
 
     post {
