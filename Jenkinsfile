@@ -24,8 +24,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'docker-compose down || true'
-                    sh 'docker-compose up -d'
+                    // Ensure any previous containers are removed before starting new ones
+                    sh '''
+                        docker-compose down || true
+                        docker ps -aq --filter "name=db_cont" | xargs -r docker rm -f
+                        docker-compose up -d
+                    '''
                 }
             }
         }
