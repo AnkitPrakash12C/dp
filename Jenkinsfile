@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'ankitprakash12c/notes-app:latest'
+        IMAGE_NAME = 'ankitprakash12c/dp:latest'
     }
 
     stages {
@@ -10,14 +10,6 @@ pipeline {
             steps {
                 git branch: 'main', 
                 url: 'https://github.com/AnkitPrakash12C/dp'
-            }
-        }
-
-        stage('Docker Login') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerHubCreds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                }
             }
         }
 
@@ -31,9 +23,10 @@ pipeline {
 
         stage('Push to DockerHub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerHubCreds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-                    sh "docker push ${IMAGE_NAME}"
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerHubCreds') {
+                        docker.image("${IMAGE_NAME}").push()
+                    }
                 }
             }
         }
