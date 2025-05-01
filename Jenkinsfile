@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_BUILDKIT = "0"
         DOCKER_CONTEXT = "default"
+        IMAGE_NAME = 'ankitprakash1808/notes-app:latest'
     }
 
     stages {
