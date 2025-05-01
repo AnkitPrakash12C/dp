@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'ankitprakash1808/notes-app:latest'
+        DOCKER_BUILDKIT = "0"
+        DOCKER_CONTEXT = "default"
     }
 
     stages {
