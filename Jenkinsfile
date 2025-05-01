@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'ankitprakash1808/notes-app:latest'
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
+        IMAGE_NAME = "ankitprakash1808/notes-app:${IMAGE_TAG}"
     }
 
     stages {
@@ -22,7 +23,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Push to DockerHub') {
             steps {
